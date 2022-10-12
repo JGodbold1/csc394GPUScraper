@@ -1,24 +1,22 @@
-from . import get_db_conn
-from flask_login import UserMixin
+# models.py may be completely unnecessary
+# we will create tables through psql in 
+# the terminal instead, and then populate them
+# with queries in our application
 
-conn = get_db_conn()
-cur = conn.cursor()
+# from . import get_db_conn
 
-cur.execute('DROP TABLE IF EXISTS users;')
-cur.execute('CREATE TABLE users (id serial PRIMARY KEY,'
-                                'username varchar (50) NOT NULL,'
-                                'password varchar (50) NOT NULL);'
-)
+# conn = get_db_conn()
+# cur = conn.cursor()
 
-cur.execute('INSERT INTO users (username, password)'
-            'VALUES (%s, %s)',
-            ('DKULIS','258369147')
-)
+# cur.execute('CREATE TABLE users (id serial PRIMARY KEY,'
+#                                 'username varchar (50) NOT NULL,'
+#                                 'password varchar (50) NOT NULL);'
+# )
 
-conn.commit()
+# conn.commit()
 
-cur.close()
-conn.close()
+# cur.close()
+# conn.close()
 
 
 

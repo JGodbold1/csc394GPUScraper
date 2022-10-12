@@ -18,7 +18,15 @@
     margin-bottom: 15px;
 }
 
+.close {
+    float: right;
+    border: 0px;
+    background-color: transparent;
+}
+
 body {
     background: #f4f4f4;
 }
+
+
 
