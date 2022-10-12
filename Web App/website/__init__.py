@@ -16,6 +16,7 @@ def create_app():
 
     return app
 
+# connect to the database
 def get_db_conn():
     conn = psycopg2.connect("dbname=test user=postgres")
     return conn

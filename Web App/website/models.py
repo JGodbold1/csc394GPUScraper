@@ -1,7 +1,7 @@
 # models.py may be completely unnecessary
 # we will create tables through psql in 
 # the terminal instead, and then populate them
-# with queries in our application
+# with queries in our application.
 
 # from . import get_db_conn
 

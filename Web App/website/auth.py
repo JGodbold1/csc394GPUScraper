@@ -38,6 +38,7 @@ def register():
                         (username, hashed_password))
             conn.commit()
             flash('Account created.', category='success')
+            # redirects to a different page to prevent POST request issues
             return redirect(url_for('auth.account_created'))
 
     return render_template('register.html')
