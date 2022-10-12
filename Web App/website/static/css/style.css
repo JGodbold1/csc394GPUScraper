@@ -1,0 +1,24 @@
+.navbar-brand {
+    color: #f4f4f4;
+}
+
+.navbar-brand:hover {
+    color: cornflowerblue;
+}
+
+.nav-link {
+    color: #f4f4f4;
+}
+
+.nav-link:hover {
+    color: cornflowerblue;
+}
+
+.form-control {
+    margin-bottom: 15px;
+}
+
+body {
+    background: #f4f4f4;
+}
+

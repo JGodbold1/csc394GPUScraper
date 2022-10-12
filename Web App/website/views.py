@@ -1,7 +1,14 @@
 from flask import Blueprint, render_template
+from . import get_db_conn
 
 views = Blueprint('views', __name__)
 
-@views.route('/') #this is for home page defined by '/'
+@views.route('/')
 def home():
-    return render_template("home.html")
+    conn = get_db_conn()
+    cur = conn.cursor()
+    cur.execute('SELECT * FROM users;')
+    users = cur.fetchall()
+    cur.close()
+    conn.close()
+    return render_template('home.html', users=users)
