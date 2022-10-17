@@ -1,0 +1,44 @@
+
+/* css for header section
+    .header {
+        height: 50px;
+        width: 100%;
+        opacity: 1;
+        margin-bottom: 0px;
+    }
+*/
+
+/*css for bodysection*/
+
+    .grid-body {
+        display: flex;
+        gap: 1em;
+        flex-wrap: wrap;
+    }
+    .grid-body > * {
+        flex: 1 1 100%;
+    }
+    /* padding for content of whole page i.e. centers all elements in side of said div*/
+    .gb-padding {
+        padding: 50px 300px 75px;
+        gap: 40px;
+    }
+    
+    /*css for search section*/
+
+    .sb-content{
+        display:flex;
+        flex-wrap: wrap;
+    }
+
+    .sb-content > *:nth-child(1) {
+        flex: 1 1 30%;
+        min-width: 15ch;
+    }
+    .sb-content > *:nth-child(2) {
+        flex: 1 1 70%;
+        min-width: 25ch;
+    }
+
+/*css for Google Map Box*/
+    /*padding*/
