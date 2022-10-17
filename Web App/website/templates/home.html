@@ -3,6 +3,7 @@
         <Head>
             <title>Home Page LoggedIn</title>
             <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+            
         </Head>
         <body style="background-color: white;">
             <!-- Header section-->
@@ -65,6 +66,19 @@
 
                                 <input type="checkbox" id="Nvidia">
                                 <label for="nvidia">Nvidia</label><br>
+
+                            <hr>
+
+                            <h6>Max Price</h6>
+                            <select name="maxprice" id="maxprice">
+                                <option value="100">100</option>
+                                <option value="200">200</option>
+                                <option value="300">300</option>
+                                <option value="400">400</option>
+                                <option value="500">500</option>
+                                <option value="600">600</option>
+                                <option value="700+">700+</option>
+                            </select>
 
                             <hr>
 
@@ -157,6 +171,8 @@
 
 
             </div><!--End of grid for element stacking-->
+
+            
 
             <h8>version 1.0, developed by Jayden Godbold</h8>
             {% endblock %}

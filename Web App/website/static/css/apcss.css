@@ -1,0 +1,69 @@
+.btn {
+    border: none;
+    background-color: inherit;
+    padding: 14px 28px;
+    font-size: 16px;
+    cursor: pointer;
+    display: inline-block;
+}
+
+/* func1 */
+.Func1 {
+    color: rgb(0, 0, 0);
+}
+
+.Func1:hover {
+    background-color: #3c546e;
+    color: white;
+}
+
+/* func2 */
+.Func2 {
+    color: rgb(0, 0, 0);
+}
+
+.Func2:hover {
+    background-color: #3c546e;
+    color: white;
+}
+
+/* func3 */
+.Func3 {
+    color: rgb(0, 0, 0);
+}
+
+.Func3:hover {
+    background-color: #3c546e;
+    color: white;
+}
+
+/* func4 */
+.Func4 {
+    color: rgb(0, 0, 0);
+}
+
+.Func4:hover {
+    background-color: #3c546e;
+    color: white;
+}
+
+/* func5 */
+.Func5 {
+    color: rgb(0, 0, 0);
+}
+
+.Func5:hover {
+    background-color: #3c546e;
+    color: white;
+}
+
+/* func6 */
+.Func6 {
+    color: rgb(0, 0, 0);
+}
+
+.Func6:hover {
+    background-color: #3c546e;
+    color: white;
+}
+
