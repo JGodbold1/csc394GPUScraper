@@ -1,3 +1,21 @@
+<style>
+  .navbar-brand {
+    color: #f4f4f4;
+}
+
+.navbar-brand:hover {
+    color: cornflowerblue;
+}
+
+.nav-link {
+    color: #f4f4f4;
+}
+
+.nav-link:hover {
+    color: cornflowerblue;
+}
+</style>
+
 <nav class="navbar navbar-expand-lg bg-dark">
   <div class="container-fluid">
     <a class="navbar-brand" href="{{url_for('views.home')}}">GPYou</a>
@@ -12,6 +30,7 @@
     >
       <span class="navbar-toggler-icon"></span>
     </button>
+    {% if not session.username %}
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
@@ -28,9 +47,15 @@
         <li class="nav-item">
           <a class="nav-link" href="{{url_for('auth.admin')}}">Admin</a>
         </li>
+    {% else %}
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
           <a class="nav-link" href="{{url_for('auth.logout')}}">Logout</a>
         </li>
+      </ul>
+    </div>
+    {% endif %}
       </ul>
     </div>
   </div>

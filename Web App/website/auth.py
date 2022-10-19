@@ -5,9 +5,10 @@ from flask import Blueprint, render_template, request, session, redirect, url_fo
 from werkzeug.security import generate_password_hash, check_password_hash
 
 auth = Blueprint('auth', __name__)
+# connect to the database using credentials contained within main.py
 conn = get_db_conn()
 
-# Create register page
+# User registration
 @auth.route('/register', methods=['GET','POST'])
 def register():
     cur = conn.cursor()
@@ -37,15 +38,14 @@ def register():
                         'VALUES (%s, %s)',
                         (username, hashed_password))
             conn.commit()
-            flash('Account created.', category='success')
-            # redirects to a different page to prevent POST request issues
+            # redirects upon success to prevent POST request issues
             return redirect(url_for('auth.account_created'))
 
     return render_template('register.html')
 
 @auth.route('/account_created')
 def account_created():
-    return render_template('success.html')
+    return render_template('account_created.html')
 
 #  Create login page
 @auth.route('/login', methods=['GET','POST'])
@@ -53,15 +53,15 @@ def login():
     cur = conn.cursor()
 
     if request.method == 'POST':
-        username = request.form.get('username')
+        session['username'] = request.form['username']
         password = request.form.get('password')
 
-        cur.execute('SELECT * FROM users WHERE username = %s;', (username,))
+        cur.execute('SELECT * FROM users WHERE username = %s;', (session['username'],))
         account = cur.fetchone()
         if account:
             if check_password_hash(account[2], password):
-                flash('Login successful.', category='success')
-                sleep(.25)
+                flash(f'Logged in as {session["username"]}.', category='success')
+                sleep(.3)
                 return redirect(url_for('views.home'))
             else:
                 flash('Incorrect password.', category='error')
@@ -70,10 +70,13 @@ def login():
         
     return render_template("login.html")
 
-# Logout to home screen
-@auth.route('/')
+# Logout to home screen, flash message on logout
+@auth.route('/logout')
 def logout():
-    pass
+    # remove the username from the session if it's there
+    session.pop('username', None)
+    flash('Logged out.')
+    return render_template('home.html')
 
 # Create Admin Page
 @auth.route('/admin')
@@ -83,7 +86,7 @@ def admin():
     cur.execute('SELECT VERSION();')
     version = cur.fetchone()
     cur.execute('SELECT * FROM users;')
-    users = cur.fetchall()
+    users = cur.fetchone()
     cur.close()
     conn.close()
     return render_template("admin.html", user=users, version=version)

@@ -1,9 +1,9 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, session, flash, redirect, url_for
 from . import get_db_conn
 
 views = Blueprint('views', __name__)
 
-# home page is also the landing page (for when a user logs in)
+# home page
 @views.route('/')
 def home():
     return render_template('home.html')

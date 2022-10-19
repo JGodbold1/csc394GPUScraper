@@ -2,9 +2,37 @@
 
 <!-- display postgreSQL version and users listed in the database -->
 <!-- TODO: add buttons to edit/delete users -->
-<div class="users">
+<style>
+    table {
+        text-align: center;
+        table-layout: fixed;
+        width: 50%;
+        border-collapse: collapse;
+        border: thin solid cornflowerblue;
+    }
+    th, td {
+        padding: 20px;
+        border: 3px solid cornflowerblue;
+    }
+</style>
+
+<div class="version">
     <h2>{{version[0]}}</h2>
-    <h3>{{user[0]}}</h3>
+</div>
+
+<div class="user">
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+        </tr>
+        <td>
+            {{user[0]}}
+        </td>
+        <td>
+            {{user[1]}}
+        </td>
+    </table>
 </div>
 
 {% endblock %}

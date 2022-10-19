@@ -4,7 +4,7 @@ from os import path
 
 def create_app():
     app = Flask(__name__)
-    app.secret_key = "super_secret!"
+    app.secret_key = "supersecret!"
 
     from .views import views
     from .auth import auth
