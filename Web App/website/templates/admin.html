@@ -25,13 +25,17 @@
         <tr>
             <th>ID</th>
             <th>Username</th>
+            <th>Role</th>
         </tr>
-        <td>
-            {{user[0]}}
-        </td>
-        <td>
-            {{user[1]}}
-        </td>
+        {% for row in user %}
+        <tr>
+            {% for cell in row %}
+            <td>
+                {{ cell }}
+            </td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
     </table>
 </div>
 

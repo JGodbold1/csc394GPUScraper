@@ -1,4 +1,4 @@
-from flask import Flask, g
+from flask import Flask
 import psycopg2
 from os import path
 
@@ -18,5 +18,5 @@ def create_app():
 
 # connect to the database
 def get_db_conn():
-    conn = psycopg2.connect("dbname=test user=postgres")
+    conn = psycopg2.connect('dbname=test user=postgres')
     return conn

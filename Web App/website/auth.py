@@ -1,4 +1,3 @@
-from multiprocessing.connection import wait
 from time import sleep
 from . import get_db_conn
 from flask import Blueprint, render_template, request, session, redirect, url_for, abort, flash
@@ -62,6 +61,8 @@ def login():
             if check_password_hash(account[2], password):
                 flash(f'Logged in as {session["username"]}.', category='success')
                 sleep(.3)
+                if account[3] == 'admin':
+                    session['username'] = 'admin'
                 return redirect(url_for('views.home'))
             else:
                 flash('Incorrect password.', category='error')
@@ -81,12 +82,9 @@ def logout():
 # Create Admin Page
 @auth.route('/admin')
 def admin():
-    conn = get_db_conn()
     cur = conn.cursor()
     cur.execute('SELECT VERSION();')
     version = cur.fetchone()
-    cur.execute('SELECT * FROM users;')
-    users = cur.fetchone()
-    cur.close()
-    conn.close()
+    cur.execute('SELECT id, username, role FROM users;')
+    users = cur.fetchall()
     return render_template("admin.html", user=users, version=version)

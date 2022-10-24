@@ -1,19 +1,19 @@
 <style>
   .navbar-brand {
     color: #f4f4f4;
-}
+  }
 
-.navbar-brand:hover {
+  .navbar-brand:hover {
     color: cornflowerblue;
-}
+  }
 
-.nav-link {
+  .nav-link {
     color: #f4f4f4;
-}
+  }
 
-.nav-link:hover {
+  .nav-link:hover {
     color: cornflowerblue;
-}
+  }
 </style>
 
 <nav class="navbar navbar-expand-lg bg-dark">
@@ -44,9 +44,19 @@
         <li class="nav-item">
           <a class="nav-link" href="{{url_for('auth.register')}}">Register</a>
         </li>
+      </ul>
+    </div>
+    {% elif session['username'] == 'admin' %}
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="{{url_for('auth.logout')}}">Logout</a>
+        </li>
         <li class="nav-item">
           <a class="nav-link" href="{{url_for('auth.admin')}}">Admin</a>
         </li>
+      </ul>
+    </div>
     {% else %}
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -57,6 +67,5 @@
     </div>
     {% endif %}
       </ul>
-    </div>
   </div>
 </nav>
