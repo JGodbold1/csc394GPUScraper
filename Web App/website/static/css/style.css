@@ -1,4 +1,15 @@
+.user-table {
+    width: 100%;
+    position: relative;
+    bottom: 240px;
+    left: 325px;
+}
+
 .form-control {
+    margin-bottom: 15px;
+}
+
+.form-group {
     margin-bottom: 15px;
 }
 
@@ -10,6 +21,21 @@
 
 body {
     background: #f4f4f4;
+}
+
+table {
+    text-align: center;
+    table-layout: fixed;
+    width: 50%;
+    border-collapse: collapse;
+    border: thin solid cornflowerblue;
+}
+th, td {
+    padding: 10px;
+    border: 1px solid cornflowerblue;
+}
+tr:nth-child(odd){
+    background-color: lightgray;
 }
 
 

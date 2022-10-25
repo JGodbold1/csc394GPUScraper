@@ -61,6 +61,7 @@ def login():
             if check_password_hash(account[2], password):
                 flash(f'Logged in as {session["username"]}.', category='success')
                 sleep(.3)
+                # check if role is admin
                 if account[3] == 'admin':
                     session['username'] = 'admin'
                 return redirect(url_for('views.home'))
@@ -83,8 +84,75 @@ def logout():
 @auth.route('/admin')
 def admin():
     cur = conn.cursor()
-    cur.execute('SELECT VERSION();')
-    version = cur.fetchone()
     cur.execute('SELECT id, username, role FROM users;')
     users = cur.fetchall()
-    return render_template("admin.html", user=users, version=version)
+    return render_template("admin.html", user=users)
+
+@auth.route('/add_user', methods=['POST'])
+def add_user():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        role = request.form['role']
+
+        cur = conn.cursor()
+        cur.execute('SELECT * FROM users WHERE username = %s', (username,))
+        account = cur.fetchone()
+        # show errors upon failed validation checks
+        if account:
+            flash('User already exists!', category='error')
+        elif len(username) < 2:
+            flash('Username must be more than two characters long.', category='error')
+        elif len(password) < 6:
+            flash('Password must be longer than six characters.', category='error')
+        elif role != 'user' and role != 'admin':
+            flash("Role must either be 'user' or 'admin'.", category='error')
+        else:
+            # add user to database after passing validation checks
+            cur.execute('INSERT INTO users (username, password, role)'
+                        'VALUES (%s,%s,%s)',
+                        (username, generate_password_hash(password), role))
+            conn.commit()
+            flash('User created', category='success')
+
+        return redirect(url_for('auth.admin'))
+
+@auth.route('/edit/<id>', methods=['POST','GET'])
+def edit(id):
+    cur = conn.cursor()
+
+    cur.execute('SELECT * FROM users WHERE id = %s', (id))
+    data = cur.fetchall()
+    cur.close()
+    print(data[0])
+    return render_template('edit.html', user=data[0])
+
+# does not function; returns 404
+@auth.route('/update/<id>', methods=['POST'])
+def update(id):
+    if request.method == 'POST':
+        username = request.form['username']
+        password = generate_password_hash(request.form['password'])
+        role = request.form['role'].lower()
+
+        cur = conn.cursor()
+        cur.execute("""
+        UPDATE users
+        SET username = %s,
+            password = %s,
+            role = %s
+        WHERE id = %s
+        """, (username, password, role, id))
+        flash('User information has been updated.')
+        conn.commit()
+        return redirect(url_for('auth.admin'))
+
+@auth.route('/delete/<string:id>', methods=['POST','GET'])
+def delete(id):
+    cur = conn.cursor()
+
+    cur.execute('DELETE FROM users WHERE id = {0}'.format(id))
+    conn.commit()
+    flash('User deleted.', category='error')
+    return redirect(url_for('auth.admin'))
+
