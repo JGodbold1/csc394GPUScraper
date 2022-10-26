@@ -2,15 +2,15 @@
 <div class="row">
     <div class="col-md-4 offset-md-4">
         <div class="card card-body">
-            <form action="/update/{{user.id}}" method="POST">
+            <form action="" method="POST">
                 <div class="form-group">
-                    <input type="text" name="username" value="{{user.username}}" placeholder="Edit username">
+                    <input type="text" name="username" value="{{user[1]}}">
                 </div>
                 <div class="form-group">
-                    <input type="text" name="password" value="{{user.password}}" placeholder="Edit password">
+                    <input type="text" name="password" value="{{user.password}}" placeholder="Set new password">
                 </div>
                 <div class="form-group">
-                    <input type="text" name="role" value="{{user.role}}" placeholder="Edit role">
+                    <input type="text" name="role" value="{{user[3]}}">
                 </div>
                 <button class="btn btn-primary btn-block"> 
                     Update

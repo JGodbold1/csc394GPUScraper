@@ -2,6 +2,10 @@
 
 <!-- display postgreSQL version and users listed in the database -->
 <!-- TODO: add buttons to edit/delete users -->
+<style>
+
+</style>
+
 <div class="row"><h3>Create User</h3></div>
 <div class="row">
     <div class="col-md-3">
@@ -41,7 +45,7 @@
                 </td>
                 {% endfor %}
                 <td width="130">
-                    <a href="/edit/{{row[0]}}" class="btn btn-secondary btn-sm">edit</a>
+                    <a href="/update/{{row[0]}}" class="btn btn-secondary btn-sm">edit</a>
                     <a href="/delete/{{row[0]}}" class="btn btn-danger btn-delete btn-sm">delete</a>
                 </td>
             </tr>
@@ -49,5 +53,4 @@
         </tbody>
     </table>
 </div>
-
 {% endblock %}

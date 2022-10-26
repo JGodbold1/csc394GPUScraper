@@ -88,7 +88,8 @@ def admin():
     users = cur.fetchall()
     return render_template("admin.html", user=users)
 
-@auth.route('/add_user', methods=['POST'])
+# add users to the database
+@auth.route('/add_user', methods=['POST','GET'])
 def add_user():
     if request.method == 'POST':
         username = request.form['username']
@@ -113,40 +114,42 @@ def add_user():
                         'VALUES (%s,%s,%s)',
                         (username, generate_password_hash(password), role))
             conn.commit()
-            flash('User created', category='success')
+            flash('User created.', category='success')
 
         return redirect(url_for('auth.admin'))
 
-@auth.route('/edit/<id>', methods=['POST','GET'])
-def edit(id):
-    cur = conn.cursor()
-
-    cur.execute('SELECT * FROM users WHERE id = %s', (id))
-    data = cur.fetchall()
-    cur.close()
-    print(data[0])
-    return render_template('edit.html', user=data[0])
-
-# does not function; returns 404
-@auth.route('/update/<id>', methods=['POST'])
+# update users in the database
+@auth.route('/update/<string:id>', methods=['POST','GET'])
 def update(id):
+    cur = conn.cursor()
+    cur.execute('SELECT * FROM users WHERE id = {0}'.format(id))
+    data = cur.fetchall()
+    print(data[0])
+
     if request.method == 'POST':
         username = request.form['username']
-        password = generate_password_hash(request.form['password'])
+        password = request.form['password']
         role = request.form['role'].lower()
 
-        cur = conn.cursor()
-        cur.execute("""
-        UPDATE users
-        SET username = %s,
-            password = %s,
-            role = %s
-        WHERE id = %s
-        """, (username, password, role, id))
-        flash('User information has been updated.')
-        conn.commit()
-        return redirect(url_for('auth.admin'))
+        if len(username) < 2:
+            flash('Username must be more than two characters long.', category='error')
+        elif len(password) < 6:
+            flash('Password must be longer than six characters.', category='error')
+        elif role != 'user' and role != 'admin':
+            flash("Role must either be 'user' or 'admin'.", category='error')
+        else:
+            cur.execute('''
+                        UPDATE users u SET
+                        username = %s, password = %s, role = %s
+                        WHERE id = %s
+                        ''', (username, generate_password_hash(password), role, id))
+            conn.commit()
+            flash('User updated.',category='success')
+            return redirect(url_for('auth.admin'))
 
+    return render_template('update.html', user=data[0])
+
+# remove users from the database
 @auth.route('/delete/<string:id>', methods=['POST','GET'])
 def delete(id):
     cur = conn.cursor()
