@@ -34,7 +34,7 @@ th, td {
     padding: 10px;
     border: 1px solid cornflowerblue;
 }
-tr:nth-child(odd){
+tr:nth-child(even){
     background-color: lightgray;
 }
 
