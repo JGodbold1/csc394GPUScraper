@@ -1,6 +1,6 @@
 from time import sleep
 from . import get_db_conn
-from flask import Blueprint, render_template, request, session, redirect, url_for, flash
+from flask import Blueprint, render_template, request, session, redirect, url_for, abort, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 
 auth = Blueprint('auth', __name__)
@@ -46,7 +46,7 @@ def account_created():
     return render_template('account_created.html')
 
 #  Create login page
-@auth.route('/', methods=['GET','POST'])
+@auth.route('/login', methods=['GET','POST'])
 def login():
     cur = conn.cursor()
 
@@ -57,11 +57,11 @@ def login():
         cur.execute('SELECT * FROM USERS WHERE username = %s;', (session['username'],))
         account = cur.fetchone()
         if account:
-            if check_password_hash(account[2], password):
+            if check_password_hash(account[1], password):
                 flash(f'Logged in as {session["username"]}.', category='success')
                 sleep(.3)
                 # check if role is admin
-                if account[3]:
+                if account[2] == True:
                     session['username'] = 'admin'
                 return redirect(url_for('views.home'))
             else:
@@ -83,7 +83,7 @@ def logout():
 @auth.route('/admin')
 def admin():
     cur = conn.cursor()
-    cur.execute('SELECT id, username, isAdmin FROM USERS;')
+    cur.execute('SELECT username, isAdmin FROM USERS;')
     users = cur.fetchall()
     return render_template("admin.html", user=users)
 
@@ -118,10 +118,10 @@ def add_user():
         return redirect(url_for('auth.admin'))
 
 # update users in the database
-@auth.route('/update/<id>', methods=['POST','GET'])
-def update(id):
+@auth.route('/update/<string:username>', methods=['POST','GET'])
+def update(username):
     cur = conn.cursor()
-    cur.execute('SELECT * FROM USERS WHERE id = %s', (id,))
+    cur.execute('SELECT * FROM USERS WHERE username = %s', (username,))
     data = cur.fetchall()
     print(data[0])
 
@@ -137,23 +137,28 @@ def update(id):
         elif role != 'true' and role != 'false':
             flash("Role must be set to true or false.", category='error')
         else:
-            cur.execute('''
+            #ls need try catch blcok to handle duplicate key values
+            try:
+                test = cur.execute('''
                         UPDATE USERS u SET
                         username = %s, password = %s, isAdmin = %s
-                        WHERE id = %s
-                        ''', (username, generate_password_hash(password), role, id))
-            conn.commit()
-            flash('User updated.',category='success')
+                        ''', (username, generate_password_hash(password), role))
+                print(test.__str__)
+                conn.commit()
+                flash('User updated.',category='success')
+            except:
+                print("Crash! duplicat key found")
+                flash('Username has already been taken.', category='error')
             return redirect(url_for('auth.admin'))
 
     return render_template('update.html', user=data[0])
 
 # remove users from the database
-@auth.route('/delete/<string:id>', methods=['POST','GET'])
-def delete(id):
+@auth.route('/delete/<string:username>', methods=['POST','GET'])
+def delete(username):
     cur = conn.cursor()
 
-    cur.execute('DELETE FROM USERS WHERE id = %s', (id,))
+    cur.execute('DELETE FROM USERS WHERE username = %s', (username,))
     conn.commit()
     flash('User deleted.', category='error')
     return redirect(url_for('auth.admin'))
