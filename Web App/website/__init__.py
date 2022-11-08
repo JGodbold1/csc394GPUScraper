@@ -6,8 +6,15 @@ from os import path
 # The current database connection is made
 # with the assumption that it does not have
 # a password and default port 5432
-DB_NAME = 'test'
+# DB_NAME = 'gpuapp_db' #ls nov 6 EC2CHANGE
+# DB_USER = 'postgres' #ls nov 6 EC2CHANGE
+# DB_PASS = 'postgres' #ls - nov 6 - added for localhost debugging EC2CHANGE
+#ls 11/08/2022 adding EC2 elements
+DB_HOST = 'db-hw3.cyxa8bcyeg3o.us-east-1.rds.amazonaws.com'
+DB_NAME = 'postgres'
 DB_USER = 'postgres'
+DB_PASS =  'he1pMEplease'
+DB_PORT = 5432
 DEFAULT_ADMIN_PASS = generate_password_hash('allswellthatendswell')
 
 def create_app():
@@ -27,11 +34,13 @@ def create_app():
 
 # connect to the database
 def get_db_conn():
-    conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER)
+    #conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS) ls 11/08/2022 disabling for deployment
+    conn = psycopg2.connect(host = DB_HOST, dbname=DB_NAME, user=DB_USER, password = DB_PASS, port = DB_PORT)
     return conn
 
 def create_tables():
-    conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER)
+    #conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS)ls 11/08/2022 disabling for deployment
+    conn = psycopg2.connect(host = DB_HOST, dbname=DB_NAME, user=DB_USER, password = DB_PASS, port = DB_PORT)
     cur = conn.cursor()
 
 
