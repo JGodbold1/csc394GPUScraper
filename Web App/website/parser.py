@@ -1,12 +1,21 @@
 import pandas as pd
 
-path = 'website/static/csv/gpu.csv'
-results_path = 'website/static/csv/results.csv'
+path = 'static/csv/gpu.csv'
+results_path = 'static/csv/results.csv'
 
+# creates a results.csv that is cleaner and does not contain headers. It is ready to scrape.
 df = pd.read_csv(path)
-df.to_csv(results_path, sep='\t', header=None, mode='a') # creates a results.csv that is cleaner and does not contain headers. It is ready to scrape.
+df.to_csv(results_path, sep='\t', header=None, mode='a')
 
-with open(results_path) as fp: # reads results.csv into a list of split keys
+# reads results.csv into a list of split keys
+with open(results_path) as fp:
     line = fp.readlines()
+    # print(line)
+
+    # Split will make it into a tuple
+    # print(line[0].split())
+
+    # Reads and prints tuples in line
     for data in line:
         print(data.split())
+
