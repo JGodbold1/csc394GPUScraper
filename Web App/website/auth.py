@@ -57,11 +57,11 @@ def login():
         cur.execute('SELECT * FROM USERS WHERE username = %s;', (session['username'],))
         account = cur.fetchone()
         if account:
-            if check_password_hash(account[1], password):
+            if check_password_hash(account[2], password):
                 flash(f'Logged in as {session["username"]}.', category='success')
                 sleep(.3)
                 # check if role is admin
-                if account[2] == True:
+                if account[3]:
                     session['username'] = 'admin'
                 return redirect(url_for('views.home'))
             else:
@@ -83,7 +83,7 @@ def logout():
 @auth.route('/admin')
 def admin():
     cur = conn.cursor()
-    cur.execute('SELECT username, isAdmin FROM USERS;')
+    cur.execute('SELECT id, username, isAdmin FROM USERS;')
     users = cur.fetchall()
     return render_template("admin.html", user=users)
 
@@ -118,10 +118,10 @@ def add_user():
         return redirect(url_for('auth.admin'))
 
 # update users in the database
-@auth.route('/update/<string:username>', methods=['POST','GET'])
-def update(username):
+@auth.route('/update/<id>', methods=['POST','GET'])
+def update(id):
     cur = conn.cursor()
-    cur.execute('SELECT * FROM USERS WHERE username = %s', (username,))
+    cur.execute('SELECT * FROM USERS WHERE id = %s', (id,))
     data = cur.fetchall()
     print(data[0])
 
@@ -140,7 +140,8 @@ def update(username):
             cur.execute('''
                         UPDATE USERS u SET
                         username = %s, password = %s, isAdmin = %s
-                        ''', (username, generate_password_hash(password), role))
+                        WHERE id = %s
+                        ''', (username, generate_password_hash(password), role, id))
             conn.commit()
             flash('User updated.',category='success')
             return redirect(url_for('auth.admin'))
@@ -148,11 +149,11 @@ def update(username):
     return render_template('update.html', user=data[0])
 
 # remove users from the database
-@auth.route('/delete/<string:username>', methods=['POST','GET'])
-def delete(username):
+@auth.route('/delete/<string:id>', methods=['POST','GET'])
+def delete(id):
     cur = conn.cursor()
 
-    cur.execute('DELETE FROM USERS WHERE username = %s', (username,))
+    cur.execute('DELETE FROM USERS WHERE id = %s', (id,))
     conn.commit()
     flash('User deleted.', category='error')
     return redirect(url_for('auth.admin'))
