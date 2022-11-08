@@ -1,6 +1,6 @@
 from time import sleep
 from . import get_db_conn
-from flask import Blueprint, render_template, request, session, redirect, url_for, abort, flash
+from flask import Blueprint, render_template, request, session, redirect, url_for, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 
 auth = Blueprint('auth', __name__)
@@ -46,7 +46,7 @@ def account_created():
     return render_template('account_created.html')
 
 #  Create login page
-@auth.route('/login', methods=['GET','POST'])
+@auth.route('/', methods=['GET','POST'])
 def login():
     cur = conn.cursor()
 

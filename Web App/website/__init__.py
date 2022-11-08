@@ -55,11 +55,10 @@ def create_tables():
                     gpu             TEXT,
                     manufacturer    TEXT,
                     memory          SMALLINT,
-                    price           MONEY,
-                    inStock         BOOL
+                    price           FLOAT,
+                    link            TEXT
                     )
                     ''')
-# onSale BOOL dk we don't need this in our schema, we'll just sort lowest to highest prices 3-NOV-22
                 
     # create favorites table
     cur.execute('''
