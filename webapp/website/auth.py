@@ -165,13 +165,14 @@ def search():
     conn = get_db_conn()
     cur = conn.cursor()
     if request.method == 'POST':
-        path = 'website/gpu.csv'
+        #path = 'website/gpu.csv'
+        path = 'gpu.csv'
         term = request.form['searchbar']
         # print(term)
-        runSearch(term, path)
-        insert_to_db(path)
+        # runSearch(term, path)
+        # insert_to(path)_db
         cur.execute('''
-                   SELECT store, gpu, manufacturer, memory, price FROM GPUS
+                   SELECT gpu_id, store, gpu, manufacturer, memory, price, link FROM GPUS
                    WHERE gpu like %s''',
                     (('%'+term+'%',)))
         # cur.execute('''
@@ -179,8 +180,8 @@ def search():
         #            WHERE gpu = %s''',
         #            (term,))
         # conn.commit()
-        data = cur.fetchall()
-        print(data)
+        data = list(set(cur.fetchall()))
+        #print(data)
         cur.close()
         conn.commit()
         return render_template("results.html", list=data)
@@ -232,7 +233,7 @@ def update(id):
     cur = conn.cursor()
     cur.execute('SELECT * FROM USERS WHERE user_id = %s', (id,))
     data = cur.fetchall()
-    print(data[0])
+    #print(data[0])
 
     if request.method == 'POST':
         username = request.form['username']
@@ -291,3 +292,8 @@ def delete(id):
     conn.commit()
     flash('User deleted.', category='error')
     return redirect(url_for('auth.admin'))
+
+
+@auth.route('/add_fav', methods = ['POST', 'GET'])
+def add_fav():
+        print("addingin" + id + "to favorits")

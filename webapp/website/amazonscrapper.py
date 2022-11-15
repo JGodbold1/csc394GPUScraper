@@ -79,10 +79,12 @@ def runSearch(search_term, path):
             record = extract_record(item)
             if record:                                         # Only add to the list of a record of an item exists
                 records.append(record)
-
+    uniq_records = set(records)
     driver.close()
 
     # print(records)
+
+   
 
     # save data to csv file
     try:
@@ -90,7 +92,7 @@ def runSearch(search_term, path):
             writer = csv.writer(f)
             writer.writerow(
                 ['Description', 'Price', 'Rating', 'ReviewCount', 'Url'])
-            writer.writerows(records)
+            writer.writerows(uniq_records) #ls added unique record 11/15/2022
     except FileNotFoundError:
         print("Couldn't find file in specified path")
 

@@ -24,6 +24,7 @@ def AmazonParser(path):
 
     # creates a results.csv that is cleaner and does not contain headers. It is ready to scrape.
     df = pd.read_csv(path)
+    print(df.__len__())
     # df.to_csv(results_path, sep='\t', header=None, mode='a')
 
     # List of details to compare to
@@ -106,19 +107,19 @@ def getURL(path):
 
 def createAmazonTuple(path):
     print("Running AWScrapper")
-    #AWSC.runSearch("GPU", path)
+    AWSC.runSearch("GPU", path)
     AmazonParser(path)
     getPrice(path)
     getURL(path)
-    records = []
+    #records = []
+    records = [] #ls 11/15/2022 making a set of unique values
     store = 'Amazon'
     for i in range(0, len(manufaturer)):
         result = (store, model[i] + gpu_suffix[i],
                   manufaturer[i], memory[i], price[i], URL[i])
         records.append(result)
-
-    # print(records[0])
-    return records
+    uniq_records = list(set(records))
+    return uniq_records
 
 
 # Use this to run the parser.py locally to test that it prints a tuple

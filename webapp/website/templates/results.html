@@ -1,62 +1,76 @@
 <!DOCTYPE html>
-    <html>
-        <Head>
-            <title>Search Results</title>
-            <link rel="stylesheet" href="{{ url_for('static', filename='css/search.css') }}">
-            
-        </Head>
-        <body style="background-color: white;">
-            <!-- Header section-->
-            <header>
-                <section id = "header" class = "header">
-                   <!-- <h1>GPU Web Scraper</h1> -->
-                </section>
-            </header>
-            {% extends "base.html" %} {% block title %}Home{% endblock %}
-            {% block content %}
+<html>
+  <head>
+    <title>Search Results</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/search.css') }}"
+    />
+  </head>
+  <body style="background-color: white">
+    <!-- Header section-->
+    <header>
+      <section id="header" class="header">
+        <!-- <h1>GPU Web Scraper</h1> -->
+      </section>
+    </header>
+    {% extends "base.html" %} {% block title %}Home{% endblock %} {% block
+    content %}
 
-            <!-- JG 11-8-22 prints list from auth.search -->
-        <div id = table1>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Store</th>
-                        <th>GPU</th>
-                        <th>Manufacturer</th>
-                        <th>Memory</th>
-                        <th>Price</th>
-                        <th>Favorite</th>
-                    </tr>
-                </thead>
-                
-                    {% for row in list %}
-                    
-                    <tr>
-                        {% for gpu in row %}
-                            <td>{{ gpu }}</td>
-                        {% endfor %}  
-                        <td>
-                            <input type = "checkbox" id = "Favorite" onclick = favPopUp()>
-                            <p id = "text" style="display:none">Added to Favorites!</p>
-                        </td>
-                    </tr>
-                    {% endfor %}  
-                
-            </table>
-            <script>
-                // When the user clicks on div, open the popup
-                function favPopUp() {
-                    var checkBox = document.getElementById("Favorite");
-                    var text = document.getElementById("text");
-                    if (checkBox.checked == true){
-                        text.style.display = "block";
-                    } else {
-                        text.style.display = "none";
-                    }
-                }
-                </script>
-            {% endblock %}
-        </div>
-            </body>
-        </body>
-    </html>
+    <!-- JG 11-8-22 prints list from auth.search -->
+    <div id="table1">
+      <table>
+        <thead>
+          <tr>
+            <th>Store</th>
+            <th>GPU</th>
+            <th>Manufacturer</th>
+            <th>Memory</th>
+            <th>Price</th>
+            <th>Favorite</th>
+          </tr>
+        </thead>
+        <!-- this is called django template -->
+
+        {% for row in list %}
+
+        <tr>
+          <td>{{ row[1] }}</td>
+          <td>{{ row[2] }}</td>
+          <td>{{ row[3] }}</td>
+          <td>{{ row[4] }}</td>
+          <td>{{ row[5] }}</td>
+          <td>
+            <input
+              type="checkbox"
+              id="{{row[0]}}"
+              onclick="favPopUp(rowlink = '{{row[0]}}')"
+            />
+            <p id="text" style="display: none">Favorited</p>
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+      <script>
+        // When the user clicks on div, open the popup
+        function favPopUp(rowlink) {
+          var checkBox = document.getElementById(rowlink);
+          var text = document.getElementById("text");
+          text.textContent = rowlink;
+          if (checkBox.checked == true) {
+            text.style.display = "block";
+            $(document).ready(function () {
+              $.ajax({
+                type: "POST",
+                url: " {{url_for('auth.add_fav')}}",
+              });
+            });
+          } else {
+            text.style.display = "none";
+          }
+        }
+      </script>
+      {% endblock %}
+    </div>
+  </body>
+</html>
