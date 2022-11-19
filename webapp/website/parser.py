@@ -34,6 +34,7 @@ def AmazonParser(path):
     model_name = ['1030', '1050', '1650', '1660', '1060', '1070', '1080',
                   '2060', '2070', '2080', '3060', '3070', '3080', '3090']
     gpu_model_suffix = ['ti', 'super']
+    
 
     for len_count, _ in enumerate(df['Description']):
 

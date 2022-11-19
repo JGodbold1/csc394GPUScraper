@@ -9,21 +9,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 auth = Blueprint('auth', __name__)
 
-
-# connect to the database using credentials contained within main.py
-
-def login_required(view):
-    """View decorator that redirects anonymous users to the login page."""
-
-    @functools.wraps(view)
-    def wrapped_view(**kwargs):
-        if g.user is None:
-            return redirect(url_for("auth.login"))
-        return view(**kwargs)
-
-    return wrapped_view
-
-
 # User registration
 @auth.route('/register', methods=['GET', 'POST'])
 def register():
@@ -99,41 +84,6 @@ def login():
         flash(error)
 
     return render_template('login.html')
-
-
-"""
-@auth.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        session['username'] = request.form['username']
-        print("route - login - request method POST: User Name: " + \
-              session['username'])
-        password = request.form.get('password')
-        conn = get_db_conn()
-        cur = conn.cursor()
-
-        # cur.execute('SELECT * FROM users WHERE username = %s;', (session['username'],))
-        cur.execute('SELECT * FROM USERS WHERE username  = %s;',
-                    (session['username'],))  # ls 11-1-2022 make logical or
-        account = cur.fetchone()
-        if account:
-            if check_password_hash(account[2], password):  # type: ignore
-                flash(
-                    f'Logged in as {session["username"]}.', category='success')
-                sleep(.3)
-                if account[3]:
-                    session['username'] = 'admin'
-                return redirect(url_for('views.home'))
-            else:
-                flash('Incorrect password.', category='error')
-
-            session['user_id'] = account[0]
-        else:
-            flash('User does not exist.', category='error')
-        # print(session['username'])
-
-    return render_template("login.html")
-"""
 
 
 # Logout to home screen, flash message on logout
